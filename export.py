@@ -45,6 +45,7 @@ file_position = 1
 Team
 """
 teams = database_functions.get_teams(db_url, db_name, db_username, db_password, "")
+print("Teams: " + teams)
 for team in teams:
     export_object[file_position] = team
 
