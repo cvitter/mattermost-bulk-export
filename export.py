@@ -2,11 +2,34 @@ import json
 from datetime import datetime 
 import database_functions
 
+
+def read_config():
+    """
+    Read the config.json file and populate global variables
+    """
+    global db_url, db_name, db_username, db_password
+    global team_list, export_inactive_users, export_direct_messages
+
+    d = json.load(open('config.json'))
+    db_url = d["database"]["url"]
+    db_name = d["database"]["database"]
+    db_username = d["database"]["user"]
+    db_password = d["database"]["password"]
+    team_list = d["actions"]["export_team_list"]
+    export_inactive_users = d["actions"]["export_inactive_users"]
+    export_direct_messages = d["actions"]["export_direct_messages"]
+
+
 def create_filename():
     """
     Create unique file name for each export file yyyy-mm-dd-hh-mm-ss.json
     """
     return datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + ".json"
+
+"""
+--------------------------------------------------------------------------------
+"""
+read_config()
 
 """
 export_object will hold each object (Version, Team, Channel, User, 
