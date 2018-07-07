@@ -26,6 +26,7 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
             "allow_open_invite": AllowOpenInvite
         }
     team_row += 1
+    print("Teams: \n" + str(teams))
         
     return teams
 
