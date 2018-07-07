@@ -1,6 +1,6 @@
 import json
 from datetime import datetime 
-#import database_functions
+import database_functions
 
 def create_filename():
     """
@@ -14,10 +14,12 @@ Post, DirectChannel, and DirectPost) that we create in the export
 """
 export_object = {}
 export_object[0] = {"type": "version", "version": 1}
+file_position = 1
 
 """
 Team
 """
+teams = database_functions.get_teams("")
 
 """
 Channel
