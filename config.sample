@@ -4,5 +4,10 @@
 		"database" : "mattermost",
 		"user" : "",
 		"password" : ""
+	},
+	{
+		"export_teams_list" : "",
+		"export_inactive_users" : false,
+		"export_direct_messages" : true
 	}
 }
