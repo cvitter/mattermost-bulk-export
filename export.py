@@ -45,7 +45,6 @@ file_position = 1
 Team
 """
 teams = database_functions.get_teams(db_url, db_name, db_username, db_password, "")
-print("Teams: " + str(teams))
 
 for team in teams:
     export_object[file_position] = team
@@ -69,4 +68,4 @@ Open a file for writing, iterate over the export_object and write
 each item onto a single line in JSONL format
 """
 for key, value in export_object.iteritems():
-    print value 
+    print value + "\n"

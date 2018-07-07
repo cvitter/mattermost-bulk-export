@@ -13,24 +13,24 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
                     "DisplayName, Name, Type, Description, AllowOpenInvite " + \
                     "FROM mattermost.Teams;"
 
-        db = connect(db_url, db_user, db_password, db_name)
-        cursor = db.cursor()
-        cursor.execute(sql_query)
+    db = connect(db_url, db_user, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
 
-        for (DisplayName, Name, Type, Description, AllowOpenInvite) in cursor:
-            print ("Name: " + DisplayName + " " + Type)
-            teams[team_row] = {
-                "type" : "team",
-                "team" : {
-                    "name": Name,
-                    "display_name": DisplayName,
-                    "type": Type,
-                    "description": Description,
-                    "allow_open_invite": AllowOpenInvite
-                }
+    for (DisplayName, Name, Type, Description, AllowOpenInvite) in cursor:
+        print ("Name: " + DisplayName + " " + Type)
+        teams[team_row] = {
+            "type" : "team",
+            "team" : {
+                "name": Name,
+                "display_name": DisplayName,
+                "type": Type,
+                "description": Description,
+                "allow_open_invite": AllowOpenInvite
             }
-            team_row += 1
-
+        }
+    team_row += 1
+        
     return teams
 
 
