@@ -5,7 +5,7 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
     """
     Takes
     """
-    teams = []
+    teams = {}
     team_row = 0;
 
     if len(team_list) == 0:
@@ -19,14 +19,11 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
 
     for (DisplayName, Name, Type, Description, AllowOpenInvite) in cursor:
         teams[team_row] = {
-            "type" : "team",
-            "team" : {
-                "name": Name,
-                "display_name": DisplayName,
-                "type": Type,
-                "description": Description,
-                "allow_open_invite": AllowOpenInvite
-            }
+            "name": Name,
+            "display_name": DisplayName,
+            "type": Type,
+            "description": Description,
+            "allow_open_invite": AllowOpenInvite
         }
     team_row += 1
         
