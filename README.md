@@ -1,1 +1,1 @@
-# mattermost-bulk-export
+# Mattermost Bulk Export Tool
