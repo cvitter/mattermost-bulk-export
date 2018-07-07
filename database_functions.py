@@ -1,7 +1,7 @@
 import MySQLdb
 
 
-def get_teams(team_list):
+def get_teams(db_url, db_name, db_user, db_password, team_list):
     """
     Takes
     """
