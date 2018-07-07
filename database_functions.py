@@ -5,7 +5,7 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
     """
     Takes
     """
-    teams = {}
+    teams = []
     team_row = 0;
 
     if len(team_list) == 0:
