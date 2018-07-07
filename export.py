@@ -10,7 +10,9 @@ def read_config():
     global db_url, db_name, db_username, db_password
     global team_list, export_inactive_users, export_direct_messages
 
-    d = json.load(open('config.json'))
+    with open('config.json') as config_file:
+        d = json.loads(config_file.read())
+        
     db_url = d["database"]["url"]
     db_name = d["database"]["database"]
     db_username = d["database"]["user"]
