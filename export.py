@@ -68,4 +68,4 @@ Open a file for writing, iterate over the export_object and write
 each item onto a single line in JSONL format
 """
 for key, value in export_object.iteritems():
-    print value + "\n"
+    print str(value) + "\n"

@@ -18,7 +18,6 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
     cursor.execute(sql_query)
 
     for (DisplayName, Name, Type, Description, AllowOpenInvite) in cursor:
-        print ("Name: " + DisplayName + " " + Type)
         teams[team_row] = {
             "type" : "team",
             "team" : {
