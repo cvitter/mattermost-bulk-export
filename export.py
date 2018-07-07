@@ -45,6 +45,9 @@ file_position = 1
 Team
 """
 teams = database_functions.get_teams("")
+for team in teams:
+    export_object[file_position] = team
+
 
 """
 Channel
