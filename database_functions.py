@@ -3,11 +3,26 @@ import MySQLdb
 
 def get_teams(db_url, db_name, db_user, db_password, team_list):
     teams = ""
-    if len(team_list) == 0:
-        sql_query = "SELECT " + \
-                    "DisplayName, Name, Type, Description, AllowOpenInvite " + \
-                    "FROM mattermost.Teams;"
 
+    sql_query = "SELECT " + \
+                "DisplayName, Name, Type, Description, AllowOpenInvite " + \
+                "FROM mattermost.Teams"
+
+    where_clause = ""
+    if len(team_list) > 1:
+        """
+        Add where and or clauses to query if we are filtering on teams
+        """
+        list_pos = 0
+        where_clause += " WHERE "
+        for team_name in team_list:
+            where_clause += "DisplayName = '" + team_name + "'"
+            if list_pos < len(team_list - 1):
+                where_clause += " OR "
+            list_pos += 1
+    print("Where Clause: " + where_clause)
+
+    sql_query += ";"
     db = connect(db_url, db_user, db_password, db_name)
     cursor = db.cursor()
     cursor.execute(sql_query)
