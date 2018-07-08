@@ -33,23 +33,12 @@ def create_filename():
 """
 read_config()
 
-"""
-export_object will hold each object (Version, Team, Channel, User, 
-Post, DirectChannel, and DirectPost) that we create in the export
-"""
-export_object = {}
-export_object[0] = {"type": "version", "version": 1}
-file_position = 1
+print(str({"type": "version", "version": 1}))
 
 """
 Team
 """
 teams = database_functions.get_teams(db_url, db_name, db_username, db_password, "")
-print(teams)
-
-for team in teams:
-    export_object[file_position] = team
-    file_position += 1
 
 
 """
