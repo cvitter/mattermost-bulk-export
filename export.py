@@ -38,7 +38,7 @@ print(str({"type": "version", "version": 1}))
 """
 Team
 """
-teams = database_functions.get_teams(db_url, db_name, db_username, db_password, "")
+teams = database_functions.get_teams(db_url, db_name, db_username, db_password, team_list)
 print(teams)
 
 """
