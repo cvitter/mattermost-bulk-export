@@ -17,7 +17,7 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
         where_clause += " WHERE "
         for team_name in team_list:
             where_clause += "DisplayName = '" + team_name + "'"
-            if list_pos < len(team_list - 1):
+            if list_pos < len(team_list) - 1:
                 where_clause += " OR "
             list_pos += 1
     print("Where Clause: " + where_clause)
