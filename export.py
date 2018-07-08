@@ -39,7 +39,7 @@ print(str({"type": "version", "version": 1}))
 Team
 """
 teams = database_functions.get_teams(db_url, db_name, db_username, db_password, "")
-
+print(teams)
 
 """
 Channel
@@ -54,11 +54,3 @@ Post
 """
 
 
-"""
-Open a file for writing, iterate over the export_object and write
-each item onto a single line in JSONL format
-"""
-print(export_object)
-
-# for key, value in export_object.iteritems():
-#     print str(value) + "\n"

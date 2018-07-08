@@ -2,7 +2,7 @@ import MySQLdb
 
 
 def get_teams(db_url, db_name, db_user, db_password, team_list):
-
+    teams = ""
     if len(team_list) == 0:
         sql_query = "SELECT " + \
                     "DisplayName, Name, Type, Description, AllowOpenInvite " + \
@@ -22,10 +22,10 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
                 "description": description,
                 "allow_open_invite": allow_open_invite
             }
-        }        
-        print(str(team))
+        }
+        teams += team + "\n"
         
-    return ""
+    return teams
 
 
 def connect(url, user, password, database):
