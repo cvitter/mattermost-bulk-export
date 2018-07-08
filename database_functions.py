@@ -23,7 +23,7 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
                 "allow_open_invite": allow_open_invite
             }
         }
-        teams += team + "\n"
+        teams += str(team) + "\n"
         
     return teams
 
