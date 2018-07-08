@@ -20,7 +20,9 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
             if list_pos < len(team_list) - 1:
                 where_clause += " OR "
             list_pos += 1
-    print("Where Clause: " + where_clause)
+
+    if len(where_clause) > 0:
+        sql_query += where_clause
 
     sql_query += ";"
     db = connect(db_url, db_user, db_password, db_name)
