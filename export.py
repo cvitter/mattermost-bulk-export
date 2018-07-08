@@ -18,6 +18,7 @@ def read_config():
     db_username = d["database"]["user"]
     db_password = d["database"]["password"]
     team_list = d["actions"]["export_team_list"]
+    export_deleted_teams = d["actions"]["export_deleted_teams"]
     export_inactive_users = d["actions"]["export_inactive_users"]
     export_direct_messages = d["actions"]["export_direct_messages"]
 
@@ -38,7 +39,7 @@ print(str({"type": "version", "version": 1}))
 """
 Team
 """
-teams = database_functions.get_teams(db_url, db_name, db_username, db_password, team_list)
+teams = database_functions.get_teams(db_url, db_name, db_username, db_password, team_list, export_deleted_teams)
 print(teams)
 
 """

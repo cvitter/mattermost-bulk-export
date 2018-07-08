@@ -1,7 +1,7 @@
 import MySQLdb
 
 
-def get_teams(db_url, db_name, db_user, db_password, team_list):
+def get_teams(db_url, db_name, db_user, db_password, team_list, export_deleted_teams):
     teams = ""
 
     sql_query = "SELECT " + \
@@ -14,12 +14,22 @@ def get_teams(db_url, db_name, db_user, db_password, team_list):
         Add where and or clauses to query if we are filtering on teams
         """
         list_pos = 0
-        where_clause += " WHERE "
+        where_clause = " WHERE "
         for team_name in team_list:
             where_clause += "DisplayName = '" + team_name + "'"
             if list_pos < len(team_list) - 1:
                 where_clause += " OR "
             list_pos += 1
+
+    if export_deleted_teams == False:
+        """
+        Only export teams that have a DeleteAt = 0
+        """
+        if len(where_clause) > 0:
+            where_clause += " AND "
+        else:
+            where_clause += " WHERE "
+        where_clause +=  "DeleteAt = 0"
 
     if len(where_clause) > 0:
         sql_query += where_clause
