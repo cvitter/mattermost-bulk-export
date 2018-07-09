@@ -9,6 +9,7 @@ def read_config():
     """
     global db_url, db_name, db_username, db_password
     global team_list, export_deleted_teams
+    global export_deleted_channels
     global export_inactive_users, export_direct_messages
 
     with open('config.json') as config_file:
