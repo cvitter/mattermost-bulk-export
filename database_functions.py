@@ -15,14 +15,12 @@ def get_channels(db_url, db_name, db_username, db_password, team_list,
                     "(SELECT Name FROM mattermost.Teams WHERE " + \
                     "id = '" + team_id + "'), " + \
                     "DisplayName, Name, Type, Header, Purpose " + \
-                    "FROM mattermost.Channels" + \
+                    "FROM mattermost.Channels " + \
                     "WHERE TeamId = '" + team_id + "'"
 
         if export_deleted_channels is False:
             sql_query += " AND DeleteAt = 0"
         sql_query += ";"
-        
-        print (sql_query)
 
         db = connect(db_url, db_username, db_password, db_name)
         cursor = db.cursor()
