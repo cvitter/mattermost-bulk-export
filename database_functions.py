@@ -75,8 +75,7 @@ def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_de
     
     team_ids = []
     for (team_id) in cursor:
-        print(team_id[0])
-        team_ids.append(team_id)
+        team_ids.append(team_id[0])
     return team_ids
 
 
