@@ -1,12 +1,17 @@
 import MySQLdb
 
 
+def get_user_teams(db_url, db_name, db_username, db_password, user_id):
+    user_teams = ""
+
+    return user_teams
+
 def get_users(db_url, db_name, db_username, db_password, team_list,
               export_deleted_users):
     users = ""
 
     sql_query = "SELECT " + \
-                "Username, Password, AuthData, AuthService, Email, " + \
+                "Id, Username, Password, AuthData, AuthService, Email, " + \
                 "Nickname, FirstName, LastName, Position, Roles, " + \
                 "Locale " + \
                 "FROM mattermost.Users"
@@ -18,7 +23,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     cursor = db.cursor()
     cursor.execute(sql_query)
 
-    for (username, password, auth_data, auth_service, email, nickname,
+    for (user_id, username, password, auth_data, auth_service, email, nickname,
          first_name, last_name, position, roles, locale) in cursor:
 
         user = {
@@ -35,7 +40,8 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "last_name": last_name,
                 "position": position,
                 "roles": roles,
-                "locale": locale
+                "locale": locale,
+                "teams": get_user_teams(db_url, db_name, db_username, db_password, user_id)
             }
         }
         users += str(user) + "\n"
@@ -43,39 +49,22 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     return users
 
 """
-{
-  "type": "user",
-  "user": {
-    "profile_image": "avatar.png",
-    "username": "username",
-    "email": "email@example.com",
-    "auth_service": "",
-    "auth_data": "",
-    "password": "passw0rd",
-    "nickname": "bobuser",
-    "first_name": "Bob",
-    "last_name": "User",
-    "position": "Senior Developer",
-    "roles": "system_user",
-    "locale": "pt_BR",
     "teams": [
-      {
-        "name": "team-name",
-        "roles": "team_user team_admin",
-        "channels": [
-          {
-            "name": "channel-name",
-            "roles": "channel_user",
-            "notify_props": {
-              "desktop": "default",
-              "mark_unread": "all"
+        {
+            "name": "team-name",
+            "roles": "team_user team_admin",
+            "channels": [
+            {
+                "name": "channel-name",
+                "roles": "channel_user",
+                "notify_props": {
+                  "desktop": "default",
+                  "mark_unread": "all"
+                }
             }
-          }
-        ]
+            ]
       }
     ]
-  }
-}
 """
 
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
