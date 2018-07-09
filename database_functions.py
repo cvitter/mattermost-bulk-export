@@ -11,9 +11,8 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "Locale " + \
                 "FROM mattermost.Users"
     if export_deleted_users is False:
-        sql_query += " AND DeleteAt = 0"
+        sql_query += " WHERE DeleteAt = 0"
     sql_query += ";"
-    print (sql_query)
 
     db = connect(db_url, db_username, db_password, db_name)
     cursor = db.cursor()
