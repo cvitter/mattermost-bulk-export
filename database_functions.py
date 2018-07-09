@@ -6,7 +6,7 @@ def get_channels(db_url, db_name, db_username, db_password, team_list,
     """
     We need to get the list of teams to retrieve channels for based
     """
-    team_ids = get_team_ids(db_url, db_name, db_user, db_password,
+    team_ids = get_team_ids(db_url, db_name, db_username, db_password,
                             team_list, export_deleted_teams)
     print("Team IDs: "  + str(team_ids))
 
@@ -34,7 +34,7 @@ def get_channels(db_url, db_name, db_username, db_password, team_list,
     return channels
 
 
-def get_team_ids(db_url, db_name, db_user, db_password, team_list, export_deleted_teams):
+def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_deleted_teams):
     """
     Get list of team ids to retrieve data for based on configuration
     """
@@ -68,7 +68,7 @@ def get_team_ids(db_url, db_name, db_user, db_password, team_list, export_delete
 
     sql_query += ";"
 
-    db = connect(db_url, db_user, db_password, db_name)
+    db = connect(db_url, db_username, db_password, db_name)
     cursor = db.cursor()
     cursor.execute(sql_query)
     
@@ -78,7 +78,7 @@ def get_team_ids(db_url, db_name, db_user, db_password, team_list, export_delete
     return team_ids
 
 
-def get_teams(db_url, db_name, db_user, db_password, team_list, export_deleted_teams):
+def get_teams(db_url, db_name, db_username, db_password, team_list, export_deleted_teams):
     teams = ""
 
     sql_query = "SELECT " + \
@@ -112,7 +112,7 @@ def get_teams(db_url, db_name, db_user, db_password, team_list, export_deleted_t
         sql_query += where_clause
 
     sql_query += ";"
-    db = connect(db_url, db_user, db_password, db_name)
+    db = connect(db_url, db_username, db_password, db_name)
     cursor = db.cursor()
     cursor.execute(sql_query)
 
