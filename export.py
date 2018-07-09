@@ -53,6 +53,7 @@ with open(file_name, "a") as output_file:
     channels = db.get_channels(db_url, db_name, db_username, db_password,
                                team_list, export_deleted_teams,
                                export_deleted_channels)
+    output_file.write(channels)
 
 """
 User

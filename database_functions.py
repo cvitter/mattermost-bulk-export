@@ -3,8 +3,79 @@ import MySQLdb
 
 def get_channels(db_url, db_name, db_username, db_password, team_list, 
                  export_deleted_teams, export_deleted_channels):
+    """
+    We need to get the list of teams to retrieve channels for based
+    """
+    team_ids = get_team_ids(db_url, db_name, db_user, db_password,
+                            team_list, export_deleted_teams)
+    print("Team IDs: "  + str(team_ids))
+
+    channels = ""
+
+    sql_query = ""
+
+    where_clause = ""
+
+    sql_query += ";"
+
+    """
+        "type": "channel",
+        "channel": {
+            "team": "team-name",
+            "name": "channel-name",
+            "display_name": "Channel Name",
+            "type": "O",
+            "header": "The Channel Header",
+            "purpose": "The Channel Purpose",
+            }
+        }
+    """
+
+    return channels
+
+
+def get_team_ids(db_url, db_name, db_user, db_password, team_list, export_deleted_teams):
+    """
+    Get list of team ids to retrieve data for based on configuration
+    """
+    sql_query = "SELECT Id FROM mattermost.Teams"
+
+    where_clause = ""
+    if len(team_list) > 1:
+        """
+        Add where and or clauses to query if we are filtering on teams
+        """
+        list_pos = 0
+        where_clause = " WHERE "
+        for team_name in team_list:
+            where_clause += "DisplayName = '" + team_name + "'"
+            if list_pos < len(team_list) - 1:
+                where_clause += " OR "
+            list_pos += 1
+
+    if export_deleted_teams == False:
+        """
+        Only export teams that have a DeleteAt = 0
+        """
+        if len(where_clause) > 0:
+            where_clause += " AND "
+        else:
+            where_clause += " WHERE "
+        where_clause +=  "DeleteAt = 0"
+
+    if len(where_clause) > 0:
+        sql_query += where_clause
+
+    sql_query += ";"
+
+    db = connect(db_url, db_user, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
     
-    return ""
+    team_ids = []
+    for (team_id) in cursor:
+        team_ids.append(team_id)
+    return team_ids
 
 
 def get_teams(db_url, db_name, db_user, db_password, team_list, export_deleted_teams):
