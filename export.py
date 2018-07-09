@@ -10,7 +10,7 @@ def read_config():
     global db_url, db_name, db_username, db_password
     global team_list, export_deleted_teams
     global export_deleted_channels
-    global export_inactive_users, export_direct_messages
+    global export_deleted_users, export_direct_messages
 
     with open('config.json') as config_file:
         d = json.loads(config_file.read())
@@ -22,7 +22,7 @@ def read_config():
     team_list = d["actions"]["export_team_list"]
     export_deleted_teams = d["actions"]["export_deleted_teams"]
     export_deleted_channels = d["actions"]["export_deleted_channels"]
-    export_inactive_users = d["actions"]["export_deleted_users"]
+    export_deleted_users = d["actions"]["export_deleted_users"]
     export_direct_messages = d["actions"]["export_direct_messages"]
 
 
