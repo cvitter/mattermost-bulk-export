@@ -19,7 +19,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     cursor.execute(sql_query)
 
     for (username, password, auth_data, auth_service, email, nickname,
-         first_name, last_name, postion, roles, locale) in cursor:
+         first_name, last_name, position, roles, locale) in cursor:
 
         user = {
             "type": "user",
