@@ -1,10 +1,93 @@
 import MySQLdb
 
 
+def get_users(db_url, db_name, db_username, db_password, team_list,
+              export_deleted_users):
+    users = ""
+
+    sql_query = "SLECT " + \
+                "Username, Password, AuthData, AuthService, Email, " + \
+                "Nickname, FirstName, LastName, Position, Roles, " + \
+                "Locale " + \
+                "FROM mattermost.Users"
+    if export_deleted_users is False:
+        sql_query += " AND DeleteAt = 0"
+    sql_query += ";"
+
+    db = connect(db_url, db_username, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
+
+    for (username, password, auth_data, auth_service, email, nickname,
+         first_name, last_name, postion, roles, locale) in cursor:
+
+        user = {
+            "type": "user",
+            "user": {
+                "profile_image": "",
+                "username": username,
+                "email": email,
+                "auth_service": auth_service,
+                "auth_data": auth_data,
+                "password": password,
+                "nickname": nickname,
+                "first_name": first_name,
+                "last_name": last_name,
+                "position": position,
+                "roles": roles,
+                "locale": locale
+            }
+        }
+        users += str(user) + "\n"
+
+    return users
+
+"""
+{
+  "type": "user",
+  "user": {
+    "profile_image": "avatar.png",
+    "username": "username",
+    "email": "email@example.com",
+    "auth_service": "",
+    "auth_data": "",
+    "password": "passw0rd",
+    "nickname": "bobuser",
+    "first_name": "Bob",
+    "last_name": "User",
+    "position": "Senior Developer",
+    "roles": "system_user",
+    "locale": "pt_BR",
+    "teams": [
+      {
+        "name": "team-name",
+        "roles": "team_user team_admin",
+        "channels": [
+          {
+            "name": "channel-name",
+            "roles": "channel_user",
+            "notify_props": {
+              "desktop": "default",
+              "mark_unread": "all"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+"""
+
+def get_user_teams(db_url, db_name, db_username, db_password, user_id):
+    user_teams = ""
+
+    return user_teams
+
+
 def get_channels(db_url, db_name, db_username, db_password, team_list,
                  export_deleted_teams, export_deleted_channels):
     """
-    We need to get the list of teams to retrieve channels for based
+    Get the list of teams to retrieve channels for
     """
     team_ids = get_team_ids(db_url, db_name, db_username, db_password,
                             team_list, export_deleted_teams)

@@ -55,10 +55,14 @@ with open(file_name, "a") as output_file:
                                export_deleted_channels)
     output_file.write(channels)
 
-"""
-User
-"""
+    """
+    User
+    """
+    users = db.get_users(db_url, db_name, db_username, db_password,
+                         team_list, export_deleted_users)
+    output_file.write(users)
 
+    
 """
 Post
 """
