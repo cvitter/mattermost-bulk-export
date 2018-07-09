@@ -42,17 +42,16 @@ with open(file_name, "a") as output_file:
     """
     Team
     """
-    teams = db.get_teams(db_url, db_name, db_username,
-                         db_password, team_list,
-                         export_deleted_teams)
+    teams = db.get_teams(db_url, db_name, db_username, db_password,
+                         team_list, export_deleted_teams)
     output_file.write(teams)
 
     """
     Channel
     """
-    channels = db.get_channels(db_url, db_name, db_username,
-                               db_password, team_list,
-                               export_deleted_teams)
+    channels = db.get_channels(db_url, db_name, db_username, db_password,
+                               team_list, export_deleted_teams,
+                               export_deleted_channels)
 
 """
 User

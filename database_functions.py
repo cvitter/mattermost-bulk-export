@@ -1,6 +1,12 @@
 import MySQLdb
 
 
+def get_channels(db_url, db_name, db_username, db_password, team_list, 
+                 export_deleted_teams, export_deleted_channels):
+    
+    return ""
+
+
 def get_teams(db_url, db_name, db_user, db_password, team_list, export_deleted_teams):
     teams = ""
 
