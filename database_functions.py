@@ -8,7 +8,8 @@ def get_channels(db_url, db_name, db_username, db_password, team_list,
     """
     team_ids = get_team_ids(db_url, db_name, db_username, db_password,
                             team_list, export_deleted_teams)
-    print("Team IDs: "  + str(team_ids))
+    for team in team_ids:
+        print(team)
 
     channels = ""
 
