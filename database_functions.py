@@ -1,8 +1,25 @@
 import MySQLdb
 
-
+"""
+    "teams": [
+        {
+            "name": "team-name",
+            "roles": "team_user team_admin",
+            "channels": [
+            {
+                "name": "channel-name",
+                "roles": "channel_user",
+                "notify_props": {
+                  "desktop": "default",
+                  "mark_unread": "all"
+                }
+            }
+            ]
+      }
+    ]
+"""
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
-    user_teams = ""
+    user_teams = []
 
     return user_teams
 
@@ -48,24 +65,6 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
 
     return users
 
-"""
-    "teams": [
-        {
-            "name": "team-name",
-            "roles": "team_user team_admin",
-            "channels": [
-            {
-                "name": "channel-name",
-                "roles": "channel_user",
-                "notify_props": {
-                  "desktop": "default",
-                  "mark_unread": "all"
-                }
-            }
-            ]
-      }
-    ]
-"""
 
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
     user_teams = ""
