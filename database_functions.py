@@ -18,9 +18,11 @@ def get_channels(db_url, db_name, db_username, db_password, team_list,
                     "FROM mattermost.Channels" + \
                     "WHERE TeamId = '" + team_id + "'"
 
-        if export_deleted_channels == False:
+        if export_deleted_channels is False:
             sql_query += " AND DeleteAt = 0"
         sql_query += ";"
+        
+        print (sql_query)
 
         db = connect(db_url, db_username, db_password, db_name)
         cursor = db.cursor()
@@ -63,7 +65,7 @@ def get_team_ids(db_url, db_name, db_username, db_password, team_list,
                 where_clause += " OR "
             list_pos += 1
 
-    if export_deleted_teams == False:
+    if export_deleted_teams is False:
         """
         Only export teams that have a DeleteAt = 0
         """
@@ -109,7 +111,7 @@ def get_teams(db_url, db_name, db_username, db_password, team_list,
                 where_clause += " OR "
             list_pos += 1
 
-    if export_deleted_teams == False:
+    if export_deleted_teams is False:
         """
         Only export teams that have a DeleteAt = 0
         """
