@@ -75,6 +75,7 @@ def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_de
     
     team_ids = []
     for (team_id) in cursor:
+        team_id = str(team_id)
         team_id = team_id.replace(",","")
         team_id = team_id.replace("(","")
         team_id = team_id.replace(")","")
