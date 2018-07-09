@@ -8,7 +8,8 @@
 	"actions" : {
 		"export_team_list" : "",
 		"export_deleted_teams" : false,
-		"export_inactive_users" : false,
+		"export_deleted_channels" : false,
+		"export_deleted_users" : false,
 		"export_direct_messages" : true
 	}
 }

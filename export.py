@@ -1,6 +1,6 @@
 import json
-from datetime import datetime 
-import database_functions
+from datetime import datetime
+import database_functions as db
 
 
 def read_config():
@@ -13,14 +13,15 @@ def read_config():
 
     with open('config.json') as config_file:
         d = json.loads(config_file.read())
-        
+
     db_url = d["database"]["url"]
     db_name = d["database"]["database"]
     db_username = d["database"]["user"]
     db_password = d["database"]["password"]
     team_list = d["actions"]["export_team_list"]
     export_deleted_teams = d["actions"]["export_deleted_teams"]
-    export_inactive_users = d["actions"]["export_inactive_users"]
+    export_deleted_channels = d["actions"]["export_deleted_channels"]
+    export_inactive_users = d["actions"]["export_deleted_users"]
     export_direct_messages = d["actions"]["export_direct_messages"]
 
 
@@ -34,18 +35,24 @@ def create_filename():
 --------------------------------------------------------------------------------
 """
 read_config()
+file_name = create_filename()
+with open(file_name, "a") as output_file:
+    output_file.write(str({"type": "version", "version": 1}))
 
-print(str({"type": "version", "version": 1}))
+    """
+    Team
+    """
+    teams = db.get_teams(db_url, db_name, db_username,
+                         db_password, team_list,
+                         export_deleted_teams)
+    output_file.write(teams)
 
-"""
-Team
-"""
-teams = database_functions.get_teams(db_url, db_name, db_username, db_password, team_list, export_deleted_teams)
-print(teams)
-
-"""
-Channel
-"""
+    """
+    Channel
+    """
+    channels = db.get_channels(db_url, db_name, db_username,
+                               db_password, team_list,
+                               export_deleted_teams)
 
 """
 User
@@ -54,5 +61,3 @@ User
 """
 Post
 """
-
-
