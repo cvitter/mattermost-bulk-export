@@ -5,7 +5,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
               export_deleted_users):
     users = ""
 
-    sql_query = "SLECT " + \
+    sql_query = "SELECT " + \
                 "Username, Password, AuthData, AuthService, Email, " + \
                 "Nickname, FirstName, LastName, Position, Roles, " + \
                 "Locale " + \
@@ -13,7 +13,6 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     if export_deleted_users is False:
         sql_query += " WHERE DeleteAt = 0"
     sql_query += ";"
-    print(sql_query)
 
     db = connect(db_url, db_username, db_password, db_name)
     cursor = db.cursor()
