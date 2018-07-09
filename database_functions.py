@@ -1,41 +1,50 @@
 import MySQLdb
 
 
-def get_channels(db_url, db_name, db_username, db_password, team_list, 
+def get_channels(db_url, db_name, db_username, db_password, team_list,
                  export_deleted_teams, export_deleted_channels):
     """
     We need to get the list of teams to retrieve channels for based
     """
     team_ids = get_team_ids(db_url, db_name, db_username, db_password,
                             team_list, export_deleted_teams)
-    for team in team_ids:
-        print(team)
 
     channels = ""
+    for team_id in team_ids:
+        sql_query = "SELECT " + \
+                    "(SELECT Name FROM mattermost.Teams WHERE " + \
+                    "id = '" + team_id + "'), " + \
+                    "DisplayName, Name, Type, Header, Purpose " + \
+                    "FROM mattermost.Channels" + \
+                    "WHERE TeamId = '" + team_id + "'"
 
-    sql_query = ""
+        if export_deleted_channels is False:
+            sql_query += " AND DeleteAt = 0"
+        sql_query += ";"
 
-    where_clause = ""
+        db = connect(db_url, db_username, db_password, db_name)
+        cursor = db.cursor()
+        cursor.execute(sql_query)
 
-    sql_query += ";"
-
-    """
-        "type": "channel",
-        "channel": {
-            "team": "team-name",
-            "name": "channel-name",
-            "display_name": "Channel Name",
-            "type": "O",
-            "header": "The Channel Header",
-            "purpose": "The Channel Purpose",
+        for (team_name, display_name, name, type, header, purpose) in cursor:
+            channel = {
+                "type": "channel",
+                "channel": {
+                    "team": team_name,
+                    "name": name,
+                    "display_name": display_name,
+                    "type": type,
+                    "header": header,
+                    "purpose": purpose,
+                }
             }
-        }
-    """
+            channels += str(channel) + "\n"
 
     return channels
 
 
-def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_deleted_teams):
+def get_team_ids(db_url, db_name, db_username, db_password, team_list,
+                 export_deleted_teams):
     """
     Get list of team ids to retrieve data for based on configuration
     """
@@ -54,7 +63,7 @@ def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_de
                 where_clause += " OR "
             list_pos += 1
 
-    if export_deleted_teams == False:
+    if export_deleted_teams is False:
         """
         Only export teams that have a DeleteAt = 0
         """
@@ -62,7 +71,7 @@ def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_de
             where_clause += " AND "
         else:
             where_clause += " WHERE "
-        where_clause +=  "DeleteAt = 0"
+        where_clause += "DeleteAt = 0"
 
     if len(where_clause) > 0:
         sql_query += where_clause
@@ -72,14 +81,15 @@ def get_team_ids(db_url, db_name, db_username, db_password, team_list, export_de
     db = connect(db_url, db_username, db_password, db_name)
     cursor = db.cursor()
     cursor.execute(sql_query)
-    
+
     team_ids = []
     for (team_id) in cursor:
         team_ids.append(team_id[0])
     return team_ids
 
 
-def get_teams(db_url, db_name, db_username, db_password, team_list, export_deleted_teams):
+def get_teams(db_url, db_name, db_username, db_password, team_list,
+              export_deleted_teams):
     teams = ""
 
     sql_query = "SELECT " + \
@@ -99,7 +109,7 @@ def get_teams(db_url, db_name, db_username, db_password, team_list, export_delet
                 where_clause += " OR "
             list_pos += 1
 
-    if export_deleted_teams == False:
+    if export_deleted_teams is False:
         """
         Only export teams that have a DeleteAt = 0
         """
@@ -107,7 +117,7 @@ def get_teams(db_url, db_name, db_username, db_password, team_list, export_delet
             where_clause += " AND "
         else:
             where_clause += " WHERE "
-        where_clause +=  "DeleteAt = 0"
+        where_clause += "DeleteAt = 0"
 
     if len(where_clause) > 0:
         sql_query += where_clause
@@ -129,7 +139,7 @@ def get_teams(db_url, db_name, db_username, db_password, team_list, export_delet
             }
         }
         teams += str(team) + "\n"
-        
+
     return teams
 
 
