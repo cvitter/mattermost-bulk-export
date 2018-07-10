@@ -66,12 +66,6 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     return users
 
 
-def get_user_teams(db_url, db_name, db_username, db_password, user_id):
-    user_teams = ""
-
-    return user_teams
-
-
 def get_channels(db_url, db_name, db_username, db_password, team_list,
                  export_deleted_teams, export_deleted_channels):
     """
