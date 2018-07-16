@@ -35,7 +35,7 @@ def get_prop_obj(notify_props):
         "desktop": notify_obj["desktop"],
         "email": notify_obj["email"],
         "mark_unread": notify_obj["mark_unread"],
-        "push": notify_obj["push"]
+        "push": str(notify_obj["push"])
     }
     return prob_obj
 
