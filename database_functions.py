@@ -31,11 +31,13 @@ def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, t
 
 def get_prop_obj(notify_props):
     notify_obj = json.loads(notify_props)
-    prop_obj = {}
-    for key, value in notify_obj.iteritems():
-        item = { key : value } 
-        prop_obj.append(item)
-    return prob_ojb
+    prob_obj = {
+        "desktop": notify_obj["desktop"],
+        "email": notify_obj["email"],
+        "mark_unread": notify_obj["mark_unread"],
+        "push": notify_obj["push"]
+    }
+    return prob_obj
 
 
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
