@@ -1,27 +1,38 @@
 import MySQLdb
 
-"""
-    "teams": [
-        {
-            "name": "team-name",
-            "roles": "team_user team_admin",
-            "channels": [
-            {
-                "name": "channel-name",
-                "roles": "channel_user",
-                "notify_props": {
-                  "desktop": "default",
-                  "mark_unread": "all"
-                }
-            }
-            ]
-      }
-    ]
-"""
+
+def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, team_id):
+    channels = []
+    sql_query = "SELECT " + \
+                "a.Roles AS Roles, a.NotifyProps AS NotifyProps, " + \
+                "b.Name AS ChannelName, b.Type AS ChannelType " + \
+                "FROM " + \
+                "mattermost.ChannelMembers AS a, " + \
+                "mattermost.Channels AS b " + \
+                "WHERE " + \
+                "a.UserId = '" + user_id + "' AND " + \
+                "a.ChannelId = b.Id AND " + \
+                "b.Type != 'D' AND b.DeleteAt = 0 AND " + \
+                "b.TeamId = '" + team_id + "'" 
+
+    db = connect(db_url, db_username, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
+
+    for (roles, notify_props, channel_name, channel_type) in cursor:
+        channel = {
+            "name": channel_name,
+            "roles": roles,
+            "notify_props": notify_props
+        }
+        channels.append(channel)
+    return channels
+
+
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
     user_teams = []
     
-    sql_query = "SELECT " + \
+    sql_query = "SELECT TeamId, " + \
                 "(SELECT Name from mattermost.Teams WHERE Id = " + \
                 "mattermost.TeamMembers.TeamId), Roles " + \
                 "FROM mattermost.TeamMembers WHERE " + \
@@ -31,10 +42,11 @@ def get_user_teams(db_url, db_name, db_username, db_password, user_id):
     cursor.execute(sql_query)
 
     user_teams = []
-    for (team_name, roles) in cursor:
+    for (team_id, team_name, roles) in cursor:
         team = {
             "name": team_name,
-            "roles": roles
+            "roles": roles,
+            "channels": get_user_team_channels(db_url, db_name, db_username, db_password, user_id, team_id)
         }
         user_teams.append(team)
     return user_teams
