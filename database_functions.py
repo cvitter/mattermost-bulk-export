@@ -1,5 +1,5 @@
 import MySQLdb
-
+import json
 
 def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, team_id):
     channels = []
