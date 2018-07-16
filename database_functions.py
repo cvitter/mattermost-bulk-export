@@ -20,7 +20,23 @@ import MySQLdb
 """
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
     user_teams = []
+    
+    sql_query = "SELECT " + \
+                "(SELECT Name from mattermost.Teams WHERE Id = " + \
+                "mattermost.TeamMembers.TeamId), Roles " + \
+                "FROM mattermost.TeamMembers WHERE " + \
+                "UserId = '" + user_id + "' AND DeleteAt = 0"
+    db = connect(db_url, db_username, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
 
+    user_teams = []
+    for (team_name, roles) in cursor:
+        team = {
+            "name": team_name,
+            "roles": roles
+        }
+        user_teams.append(team)
     return user_teams
 
 def get_users(db_url, db_name, db_username, db_password, team_list,
