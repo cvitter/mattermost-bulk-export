@@ -23,7 +23,7 @@ def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, t
         channel = {
             "name": channel_name,
             "roles": roles,
-            "notify_props": notify_props
+            "notify_props": json.loads(notify_props)
         }
         channels.append(channel)
     return channels
