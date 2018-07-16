@@ -23,10 +23,19 @@ def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, t
         channel = {
             "name": channel_name,
             "roles": roles,
-            "notify_props": json.loads(notify_props)
+            "notify_props": get_prop_obj(notify_props)
         }
         channels.append(channel)
     return channels
+
+
+def get_prop_obj(notify_props):
+    notify_obj = json.loads(notify_props)
+    prop_obj = {}
+    for key, value in notify_obj.iteritems():
+        item = { key : value } 
+        prop_obj.append(item)
+    return prob_ojb
 
 
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
