@@ -1,7 +1,9 @@
 import MySQLdb
 import json
 
-def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, team_id):
+
+def get_user_team_channels(db_url, db_name, db_username, db_password,
+                           user_id, team_id):
     channels = []
     sql_query = "SELECT " + \
                 "a.Roles AS Roles, a.NotifyProps AS NotifyProps, " + \
@@ -13,7 +15,7 @@ def get_user_team_channels(db_url, db_name, db_username, db_password, user_id, t
                 "a.UserId = '" + user_id + "' AND " + \
                 "a.ChannelId = b.Id AND " + \
                 "b.Type != 'D' AND b.DeleteAt = 0 AND " + \
-                "b.TeamId = '" + team_id + "'" 
+                "b.TeamId = '" + team_id + "'"
 
     db = connect(db_url, db_username, db_password, db_name)
     cursor = db.cursor()
@@ -42,7 +44,7 @@ def get_prop_obj(notify_props):
 
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
     user_teams = []
-    
+
     sql_query = "SELECT TeamId, " + \
                 "(SELECT Name from mattermost.Teams WHERE Id = " + \
                 "mattermost.TeamMembers.TeamId), Roles " + \
@@ -57,19 +59,24 @@ def get_user_teams(db_url, db_name, db_username, db_password, user_id):
         team = {
             "name": team_name,
             "roles": roles,
-            "channels": get_user_team_channels(db_url, db_name, db_username, db_password, user_id, team_id)
+            "channels": get_user_team_channels(db_url, db_name, db_username,
+                                               db_password, user_id, team_id)
         }
         user_teams.append(team)
     return user_teams
+
 
 def get_users(db_url, db_name, db_username, db_password, team_list,
               export_deleted_users):
     users = ""
 
     sql_query = "SELECT " + \
-                "Id, Username, Password, AuthData, AuthService, Email, " + \
-                "Nickname, FirstName, LastName, Position, Roles, " + \
-                "Locale " + \
+                "Id, Username, Password, AuthData, AuthService, " + \
+                "Email, Nickname, FirstName, LastName, " + \
+                "Position, Roles, Locale, " + \
+                "(SELECT Value FROM mattermost.Preferences WHERE " + \
+                " UserId = mattermost.Users.Id AND Category = 'theme') AS " + \
+                " Theme " + \
                 "FROM mattermost.Users"
     if export_deleted_users is False:
         sql_query += " WHERE DeleteAt = 0"
@@ -97,7 +104,8 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "position": position,
                 "roles": roles,
                 "locale": locale,
-                "teams": get_user_teams(db_url, db_name, db_username, db_password, user_id)
+                "teams": get_user_teams(db_url, db_name, db_username,
+                                        db_password, user_id)
             }
         }
         users += str(user) + "\n"
