@@ -73,25 +73,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     sql_query = "SELECT " + \
                 "Id, Username, Password, AuthData, AuthService, " + \
                 "Email, Nickname, FirstName, LastName, " + \
-                "Position, Roles, Locale, " + \
-                "(SELECT Value FROM mattermost.Preferences WHERE " + \
-                " UserId = mattermost.Users.Id AND Category = 'display_settings' " + \
-                " AND Name = 'channel_display_mode') AS ChannelDisplay, " + \
-                "(SELECT Value FROM mattermost.Preferences WHERE " + \
-                " UserId = mattermost.Users.Id AND Category = 'display_settings' " + \
-                " AND Name = 'collapse_previews') AS CollapsePreviews, " + \
-                "(SELECT Value FROM mattermost.Preferences WHERE " + \
-                " UserId = mattermost.Users.Id AND Category = 'display_settings' " + \
-                " AND Name = 'link_previews') AS LinkPreviews, " + \
-                "(SELECT Value FROM mattermost.Preferences WHERE " + \
-                " UserId = mattermost.Users.Id AND Category = 'display_settings'" + \
-                " AND Name = 'message_display') AS MessageDisplay, " + \
-                " (SELECT Value FROM mattermost.Preferences WHERE " + \
-                " UserId = mattermost.Users.Id AND Category = 'display_settings' " + \
-                " AND Name = 'name_format') AS NameFormat, " + \
-                " (SELECT Value FROM mattermost.Preferences WHERE " + \
-                " UserId = mattermost.Users.Id AND Category = 'display_settings' " + \
-                " AND Name = 'use_military_time') AS MilitaryTime " + \
+                "Position, Roles, Locale " + \
                 "FROM mattermost.Users"
     if export_deleted_users is False:
         sql_query += " WHERE DeleteAt = 0"
@@ -102,8 +84,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     cursor.execute(sql_query)
 
     for (user_id, username, password, auth_data, auth_service, email, nickname,
-         first_name, last_name, position, roles, locale, channel_display,
-         collapse_previews, link_previews, message_display, military_time) in cursor:
+         first_name, last_name, position, roles, locale) in cursor:
 
         user = {
             "type": "user",
@@ -119,9 +100,6 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "last_name": last_name,
                 "position": position,
                 "roles": roles,
-                "locale": locale,
-                "use_military_time": military_time,
-                "channel_display_mode": channel_display,
                 "teams": get_user_teams(db_url, db_name, db_username,
                                         db_password, user_id)
             }
@@ -129,6 +107,10 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
         users += str(user) + "\n"
 
     return users
+
+def get_user_preferences(user_id):
+    
+    return ""
 
 
 def get_channels(db_url, db_name, db_username, db_password, team_list,
