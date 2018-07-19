@@ -100,7 +100,8 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "last_name": last_name,
                 "position": position,
                 "roles": roles,
-                "themes": get_user_themes(user_id),
+                "themes": get_user_themes(db_url, db_username, db_password,
+                                          db_name, user_id),
                 "teams": get_user_teams(db_url, db_name, db_username,
                                         db_password, user_id)
             }
@@ -115,7 +116,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
     return users
 
 
-def get_user_themes(user_id):
+def get_user_themes(db_url, db_username, db_password, db_name, user_id):
     themes = []
     sql_query = "SELECT Name, Value FROM mattermost.Preferences " +\
                 "WHERE Category = 'theme' AND UserId = '" + user_id + "';"
@@ -128,7 +129,7 @@ def get_user_themes(user_id):
     return themes
 
 
-def get_user_preferences(user_id):
+def get_user_preferences(db_url, db_username, db_password, db_name, user_id):
     
     return ""
 
