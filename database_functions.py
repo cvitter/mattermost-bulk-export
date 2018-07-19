@@ -100,13 +100,33 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "last_name": last_name,
                 "position": position,
                 "roles": roles,
+                "themes": get_user_themes(user_id),
                 "teams": get_user_teams(db_url, db_name, db_username,
                                         db_password, user_id)
             }
         }
+        
+#         preferences = get_user_preferences(user_id)
+#         for preference in preferences:
+#             user["user"].append( {"test": 1 })
+        
         users += str(user) + "\n"
 
     return users
+
+
+def get_user_themes(user_id):
+    themes = []
+    sql_query = "SELECT Name, Value FROM mattermost.Preferences " +\
+                "WHERE Category = 'theme' AND UserId = '" + user_id + "';"
+    db = connect(db_url, db_username, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
+    
+    for (team, theme) in cursor:
+        themes.append({"team": team, "theme": theme})
+    return themes
+
 
 def get_user_preferences(user_id):
     
