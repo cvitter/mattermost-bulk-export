@@ -4,6 +4,9 @@ import json
 
 def get_user_team_channels(db_url, db_name, db_username, db_password,
                            user_id, team_id):
+    """
+    Retrieve the list of channels a user is in for a specific team
+    """
     channels = []
     sql_query = "SELECT " + \
                 "a.Roles AS Roles, a.NotifyProps AS NotifyProps, " + \
@@ -32,6 +35,12 @@ def get_user_team_channels(db_url, db_name, db_username, db_password,
 
 
 def get_prop_obj(notify_props):
+    """
+    Reads JSON string from NotifyProps field and extracts
+    those values for the notify_props object in channel
+    
+    TODO: Not an elegant/correct solution long term, fix this
+    """
     notify_obj = json.loads(notify_props)
     prob_obj = {
         "desktop": str(notify_obj["desktop"]),
@@ -43,6 +52,9 @@ def get_prop_obj(notify_props):
 
 
 def get_user_teams(db_url, db_name, db_username, db_password, user_id):
+    """
+    Retrieve the list of teams a user is a member of
+    """
     user_teams = []
 
     sql_query = "SELECT TeamId, " + \
@@ -68,6 +80,9 @@ def get_user_teams(db_url, db_name, db_username, db_password, user_id):
 
 def get_users(db_url, db_name, db_username, db_password, team_list,
               export_deleted_users):
+    """
+    Retrieve all users 
+    """
     users = ""
 
     sql_query = "SELECT " + \
@@ -100,6 +115,7 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
                 "last_name": last_name,
                 "position": position,
                 "roles": roles,
+                "locale": locale,
                 "themes": get_user_themes(db_url, db_username, db_password,
                                           db_name, user_id),
                 "teams": get_user_teams(db_url, db_name, db_username,
@@ -112,11 +128,17 @@ def get_users(db_url, db_name, db_username, db_password, team_list,
 #             user["user"].append( {"test": 1 })
         
         users += str(user) + "\n"
-
     return users
 
 
 def get_user_themes(db_url, db_username, db_password, db_name, user_id):
+    """
+    Select user themes and return as an array: "themes": []
+    
+    NOTE: The themes array object is not supported yet by the
+    Mattermost bulk data importer - 
+    https://mattermost.atlassian.net/browse/MM-11424
+    """
     themes = []
     sql_query = "SELECT Name, Value FROM mattermost.Preferences " +\
                 "WHERE Category = 'theme' AND UserId = '" + user_id + "';"
@@ -130,7 +152,21 @@ def get_user_themes(db_url, db_username, db_password, db_name, user_id):
 
 
 def get_user_preferences(db_url, db_username, db_password, db_name, user_id):
-    
+    """
+    Retrieve the list of user preferences
+    """
+
+    sql_query = "SELECT Category, Name, Value " + \
+                "FROM mattermost.Preferences WHERE " + \
+                "Category IN ('display_settings', " + \
+                "'advanced_settings','sidebar_settings', " + \
+                "'tutorial_step') AND UserId = '" + user_id + "'"
+    db = connect(db_url, db_username, db_password, db_name)
+    cursor = db.cursor()
+    cursor.execute(sql_query)
+
+    for (category, name, value) in cursor:
+        test = 'test'
     return ""
 
 
